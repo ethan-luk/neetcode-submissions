@@ -1,0 +1,30 @@
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        adjList = defaultdict(list)
+
+        for course, prereq in prerequisites:
+            adjList[course].append(prereq)
+
+        visiting = set()
+        visited = set()
+
+        def dfs(course):
+            if course in visiting:
+                return False
+            if course in visited:
+                return True
+            
+            visiting.add(course)
+            for prereq in adjList[course]:
+                if not dfs(prereq):
+                    return False
+            
+            visiting.remove(course)
+            visited.add(course)
+            return True
+            
+        for c in range(numCourses):
+            if not dfs(c):
+                return False
+        
+        return True
